@@ -8,34 +8,61 @@
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
+const LeGameUI = require('LeGameUI')
+
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
+        gameUI: LeGameUI
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
-
+    onLoad () {
+        
+    },
+    
     start () {
 
     },
+
+    onTest(event, te){
+        console.log(event, te)
+        let audioID = null;
+        cc.loader.loadRes('main/au_help.mp3', cc.AudioClip, (err, clip) => {
+            if(!err) {
+                cc.audioEngine.stop(audioID);
+                audioID = cc.audioEngine.play(clip, false);
+            }
+        })
+    },
+
+    ontest1() {
+        this.onEnterScene('e', 'Le_1')
+    },
+
+    ontest2() {
+        this.onEnterScene('d', 'main')
+    },
+
+    /**
+     * main 进入场景
+     */
+    onEnterScene(event, name) {
+        cc.director.preloadScene(name, () => {
+            cc.director.loadScene(name);
+        });
+    },
+
+    /**
+     * 返回大厅 
+     */
+    onBackMain() {
+        this.gameUI.onBack(() => {
+            // todo 返回大厅
+        })
+    }
 
     // update (dt) {},
 });
